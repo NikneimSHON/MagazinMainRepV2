@@ -1,40 +1,25 @@
 package integration;
 
-import entity.ProductEntity;
-import entity.embeddable.ProductInfo;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.junit.jupiter.api.*;
-import util.HibernateTestUtil;
+import com.nikita.shop.entity.ProductEntity;
+import com.nikita.shop.entity.embeddable.ProductInfo;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import util.TransactionManager;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import static org.junit.jupiter.api.Assertions.*;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ProductEntityIT {
-    private static SessionFactory sessionFactory;
-    private Session session;
-    private Transaction transaction;
-
-
-    @BeforeAll
-    static void openSessionFactory() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
-    }
-
-    @BeforeEach
-    void openSessionAndTransaction() {
-        session = sessionFactory.openSession();
-        transaction = session.beginTransaction();
-    }
+public class ProductEntityIT extends TransactionManager {
 
     @Test
     void save() {
         ProductEntity productEntity = getProduct();
 
         session.persist(productEntity);
+        session.flush();
+        session.clear();
 
         assertNotNull(productEntity.getId());
     }
@@ -43,6 +28,8 @@ public class ProductEntityIT {
     void get() {
         ProductEntity productEntity = getProduct();
         session.persist(productEntity);
+        session.flush();
+        session.clear();
 
         ProductEntity retrievedProductEntity = session.get(ProductEntity.class, productEntity.getId());
 
@@ -53,41 +40,33 @@ public class ProductEntityIT {
     void update() {
         ProductEntity productEntity = getProduct();
         session.persist(productEntity);
+        session.flush();
+        session.clear();
 
         var product = session.get(ProductEntity.class, productEntity.getId());
         product.setAvailable(false);
         session.merge(product);
+        session.flush();
+        session.clear();
+
 
         var resultProductEntity = session.get(ProductEntity.class, productEntity.getId());
-        assertFalse(resultProductEntity.isAvailable());
+        Assertions.assertFalse(resultProductEntity.isAvailable());
     }
 
     @Test
     void delete() {
         ProductEntity productEntity = getProduct();
         session.persist(productEntity);
+        session.flush();
+        session.clear();
 
         session.remove(productEntity);
+        session.flush();
+        session.clear();
 
-        assertNull(session.get(ProductEntity.class, productEntity.getId()));
+        Assertions.assertNull(session.get(ProductEntity.class, productEntity.getId()));
 
-    }
-
-
-    @AfterEach
-    void closeSessionAndRollbackTransaction() {
-        if (transaction != null && transaction.isActive()) {
-            transaction.rollback();
-        }
-
-        if (session != null && session.isOpen()) {
-            session.close();
-        }
-    }
-
-    @AfterAll
-    static void closeSessionFactory() {
-        sessionFactory.close();
     }
 
     private ProductEntity getProduct() {
@@ -100,7 +79,7 @@ public class ProductEntityIT {
                         .description("fa")
                         .build())
                 .createTime(Instant.now())
-                .isAvailable(true)
+                .available(true)
                 .build();
     }
 }

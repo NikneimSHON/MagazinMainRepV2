@@ -1,44 +1,42 @@
 package integration;
 
-import entity.*;
-import entity.embeddable.*;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.junit.jupiter.api.*;
-import util.HibernateTestUtil;
+import com.nikita.shop.entity.ActivityType;
+import com.nikita.shop.entity.AddressEntity;
+import com.nikita.shop.entity.ProductReviewEntity;
+import com.nikita.shop.entity.PromoCodeEntity;
+import com.nikita.shop.entity.Role;
+import com.nikita.shop.entity.ShoppingCartEntity;
+import com.nikita.shop.entity.UserEntity;
+import com.nikita.shop.entity.UserPromoCodeEntity;
+import com.nikita.shop.entity.embeddable.AddressInfo;
+import com.nikita.shop.entity.embeddable.ProductReviewInfo;
+import com.nikita.shop.entity.embeddable.ShoppingCartDate;
+import com.nikita.shop.entity.embeddable.UserActivity;
+import com.nikita.shop.entity.embeddable.UserCredentials;
+import com.nikita.shop.entity.embeddable.UserPersonalInfo;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import util.TransactionManager;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class UserEntityIT {
-
-    private static SessionFactory sessionFactory;
-    private Session session;
-    private Transaction transaction;
-
-
-    @BeforeAll
-    static void openSessionFactory() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
-    }
-
-    @BeforeEach
-    void openSessionAndTransaction() {
-        session = sessionFactory.openSession();
-        transaction = session.beginTransaction();
-    }
+public class UserEntityIT extends TransactionManager {
 
     @Test
     void save() {
         var userEntity = getUserEntity();
 
         session.persist(userEntity);
+        session.flush();
+        session.clear();
 
-        assertNotNull(userEntity.getId());
-
+        var savedUser = session.get(UserEntity.class, userEntity.getId());
+        Assertions.assertNotNull(savedUser);
     }
 
     @Test
@@ -48,13 +46,13 @@ public class UserEntityIT {
         userEntity.addAddress(addressEntity);
         addressEntity.setUser(userEntity);
 
-        session.persist(addressEntity);
         session.persist(userEntity);
+        session.flush();
+        session.clear();
 
         var user = session.get(UserEntity.class, userEntity.getId());
-
-        assertNotNull(user);
-        assertTrue(user.getAddresses().contains(addressEntity));
+        Assertions.assertNotNull(user);
+        assertEquals(1, user.getAddresses().size());
     }
 
     @Test
@@ -62,16 +60,17 @@ public class UserEntityIT {
         var userEntity = getUserEntity();
         var promoCodeEntity = getPromoCodeEntity();
         var userPromoCodeEntity = getUserPromoCodeEntity();
-
+        session.persist(userEntity);
+        session.persist(promoCodeEntity);
         userPromoCodeEntity.setUser(userEntity);
         userPromoCodeEntity.setPromoCode(promoCodeEntity);
 
         session.persist(userPromoCodeEntity);
-        session.persist(userEntity);
-        session.persist(promoCodeEntity);
+        session.flush();
+        session.clear();
 
         var userPromoCode = session.get(UserPromoCodeEntity.class, userPromoCodeEntity.getId());
-        assertNotNull(userPromoCode);
+        Assertions.assertNotNull(userPromoCode);
         assertEquals(userEntity.getId(), userPromoCode.getUser().getId());
         assertEquals(promoCodeEntity.getId(), userPromoCode.getPromoCode().getId());
     }
@@ -84,14 +83,13 @@ public class UserEntityIT {
         shoppingCartEntity.setUser(userEntity);
         userEntity.addShoppingCart(shoppingCartEntity);
 
-        session.persist(shoppingCartEntity);
         session.persist(userEntity);
+        session.flush();
+        session.clear();
 
         var user = session.get(UserEntity.class, userEntity.getId());
-
-        assertNotNull(user);
-        assertTrue(user.getShoppingCarts().contains(shoppingCartEntity));
-
+        Assertions.assertNotNull(user);
+        assertEquals(1, user.getShoppingCarts().size());
     }
 
     @Test
@@ -102,15 +100,13 @@ public class UserEntityIT {
         userEntity.addProductReview(productReviewEntity);
         productReviewEntity.setUser(userEntity);
 
-        session.persist(productReviewEntity);
         session.persist(userEntity);
+        session.flush();
+        session.clear();
 
         var user = session.get(UserEntity.class, userEntity.getId());
-
-        assertNotNull(user);
-        assertTrue(user.getProductReviews().contains(productReviewEntity));
-
-
+        Assertions.assertNotNull(user);
+        assertEquals(1, user.getProductReviews().size());
     }
 
     @Test
@@ -118,34 +114,42 @@ public class UserEntityIT {
         var userEntity = getUserEntity();
 
         session.persist(userEntity);
-        var userResult = session.get(UserEntity.class, userEntity.getId());
+        session.flush();
+        session.clear();
 
-        assertNotNull(userResult);
+        var userResult = session.get(UserEntity.class, userEntity.getId());
+        Assertions.assertNotNull(userResult);
     }
 
     @Test
     void update() {
         var userEntity = getUserEntity();
         session.persist(userEntity);
+        session.flush();
+        session.clear();
 
         var user = session.get(UserEntity.class, userEntity.getId());
         user.setPhoneNumber("1005000");
-        session.merge(user);
+        session.flush();
+        session.clear();
 
         var userResult = session.get(UserEntity.class, user.getId());
         assertEquals("1005000", userResult.getPhoneNumber());
     }
 
-
     @Test
     void delete() {
         var userEntity = getUserEntity();
         session.persist(userEntity);
+        session.flush();
+        session.clear();
 
-        session.remove(userEntity);
+        var userToDelete = session.get(UserEntity.class, userEntity.getId());
+        session.remove(userToDelete);
+        session.flush();
+        session.clear();
 
         assertNull(session.get(UserEntity.class, userEntity.getId()));
-
     }
 
     @Test
@@ -156,15 +160,16 @@ public class UserEntityIT {
         addressEntity.setUser(userEntity);
 
         session.persist(userEntity);
-        session.persist(addressEntity);
-        session.remove(userEntity);
+        session.flush();
+        session.clear();
 
-        var deletedUser = session.get(UserEntity.class, userEntity.getId());
-        var deletedAddress = session.get(AddressEntity.class, addressEntity.getId());
+        var userToDelete = session.get(UserEntity.class, userEntity.getId());
+        session.remove(userToDelete);
+        session.flush();
+        session.clear();
 
-        assertNull(deletedUser);
-        assertNull(deletedAddress);
-
+        assertNull(session.get(UserEntity.class, userEntity.getId()));
+        assertNull(session.get(AddressEntity.class, addressEntity.getId()));
     }
 
     @Test
@@ -175,16 +180,16 @@ public class UserEntityIT {
         userPromoCodeEntity.setUser(userEntity);
 
         session.persist(userEntity);
-        session.persist(userPromoCodeEntity);
+        session.flush();
+        session.clear();
 
-        session.remove(userEntity);
+        var userToDelete = session.get(UserEntity.class, userEntity.getId());
+        session.remove(userToDelete);
+        session.flush();
+        session.clear();
 
-        var deletedUser = session.get(UserEntity.class, userEntity.getId());
-        var deletedUserPromoCode = session.get(UserPromoCodeEntity.class, userPromoCodeEntity.getId());
-
-        assertNull(deletedUser);
-        assertNull(deletedUserPromoCode);
-
+        assertNull(session.get(UserEntity.class, userEntity.getId()));
+        assertNull(session.get(UserPromoCodeEntity.class, userPromoCodeEntity.getId()));
     }
 
     @Test
@@ -196,15 +201,16 @@ public class UserEntityIT {
         userEntity.addShoppingCart(shoppingCartEntity);
 
         session.persist(userEntity);
-        session.persist(shoppingCartEntity);
+        session.flush();
+        session.clear();
 
-        session.remove(userEntity);
+        var userToDelete = session.get(UserEntity.class, userEntity.getId());
+        session.remove(userToDelete);
+        session.flush();
+        session.clear();
 
-        var deletedUser = session.get(UserEntity.class, userEntity.getId());
-        var deletedShoppingCart = session.get(ShoppingCartEntity.class, shoppingCartEntity.getId());
-
-        assertNull(deletedUser);
-        assertNull(deletedShoppingCart);
+        assertNull(session.get(UserEntity.class, userEntity.getId()));
+        assertNull(session.get(ShoppingCartEntity.class, shoppingCartEntity.getId()));
     }
 
     @Test
@@ -216,34 +222,18 @@ public class UserEntityIT {
         productReviewEntity.setUser(userEntity);
 
         session.persist(userEntity);
-        session.persist(productReviewEntity);
+        session.flush();
+        session.clear();
 
-        session.remove(userEntity);
+        var userToDelete = session.get(UserEntity.class, userEntity.getId());
+        session.remove(userToDelete);
+        session.flush();
+        session.clear();
 
-        var deletedUser = session.get(UserEntity.class, userEntity.getId());
-        var deletedProductReview = session.get(ProductReviewEntity.class, productReviewEntity.getId());
-
-        assertNull(deletedUser);
-        assertNull(deletedProductReview);
-
+        assertNull(session.get(UserEntity.class, userEntity.getId()));
+        assertNull(session.get(ProductReviewEntity.class, productReviewEntity.getId()));
     }
 
-
-    @AfterEach
-    void closeSessionAndRollbackTransaction() {
-        if (transaction != null && transaction.isActive()) {
-            transaction.rollback();
-        }
-
-        if (session != null && session.isOpen()) {
-            session.close();
-        }
-    }
-
-    @AfterAll
-    static void closeSessionFactory() {
-        sessionFactory.close();
-    }
 
     private UserEntity getUserEntity() {
         return UserEntity.builder()

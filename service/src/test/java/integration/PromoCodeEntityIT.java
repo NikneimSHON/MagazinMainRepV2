@@ -1,41 +1,24 @@
 package integration;
 
-import entity.PromoCodeEntity;
-import entity.UserEntity;
-import entity.UserPromoCodeEntity;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.junit.jupiter.api.*;
-import util.HibernateTestUtil;
+import com.nikita.shop.entity.PromoCodeEntity;
+
+import com.nikita.shop.entity.UserPromoCodeEntity;
+import org.junit.jupiter.api.Test;
+import util.TransactionManager;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PromoCodeEntityIT {
-    private static SessionFactory sessionFactory;
-    private Session session;
-    private Transaction transaction;
-
-
-    @BeforeAll
-    static void openSessionFactory() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
-    }
-
-    @BeforeEach
-    void openSessionAndTransaction() {
-        session = sessionFactory.openSession();
-        transaction = session.beginTransaction();
-    }
-
+public class PromoCodeEntityIT extends TransactionManager {
     @Test
     void save() {
         var promoCodeEntity = new PromoCodeEntity();
 
         session.persist(promoCodeEntity);
+        session.flush();
+        session.clear();
 
         assertNotNull(promoCodeEntity.getId());
     }
@@ -44,6 +27,8 @@ public class PromoCodeEntityIT {
     void get() {
         var promoCodeEntity = getPromoCodeEntity();
         session.persist(promoCodeEntity);
+        session.flush();
+        session.clear();
 
         var resultPromoCodeEntity = session.get(PromoCodeEntity.class, promoCodeEntity.getId());
 
@@ -55,7 +40,11 @@ public class PromoCodeEntityIT {
         var promoCodeEntity = getPromoCodeEntity();
 
         session.persist(promoCodeEntity);
+        session.flush();
+        session.clear();
         session.remove(promoCodeEntity);
+        session.flush();
+        session.clear();
 
         assertNull(session.get(UserPromoCodeEntity.class, promoCodeEntity.getId()));
     }
@@ -64,39 +53,19 @@ public class PromoCodeEntityIT {
     void update() {
         var promoCodeEntity = getPromoCodeEntity();
         session.persist(promoCodeEntity);
+        session.flush();
+        session.clear();
 
         var promoCode = session.get(PromoCodeEntity.class, promoCodeEntity.getId());
         promoCode.setCode("1000500");
         session.merge(promoCode);
+        session.flush();
+        session.clear();
 
         var resultPromoCodeEntity = session.get(PromoCodeEntity.class, promoCodeEntity.getId());
         assertEquals("1000500", resultPromoCodeEntity.getCode());
     }
 
-
-    @AfterEach
-    void closeSessionAndRollbackTransaction() {
-        if (transaction != null && transaction.isActive()) {
-            transaction.rollback();
-        }
-
-        if (session != null && session.isOpen()) {
-            session.close();
-        }
-    }
-
-    @AfterAll
-    static void closeSessionFactory() {
-        sessionFactory.close();
-    }
-
-    private UserPromoCodeEntity getUserPromoCodeEntity() {
-        return UserPromoCodeEntity.builder()
-                .user(new UserEntity())
-                .promoCode(new PromoCodeEntity())
-                .usedAt(Instant.now())
-                .build();
-    }
 
     private PromoCodeEntity getPromoCodeEntity() {
         return PromoCodeEntity.builder()

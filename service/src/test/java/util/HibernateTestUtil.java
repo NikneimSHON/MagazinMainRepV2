@@ -1,5 +1,6 @@
 package util;
 
+import com.nikita.shop.util.HibernateUtil;
 import lombok.experimental.UtilityClass;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

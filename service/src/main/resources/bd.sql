@@ -1,91 +1,87 @@
-CREATE TABLE USERS
+CREATE TABLE users
 (
-    ID                BIGSERIAL PRIMARY KEY,
-    EMAIL             VARCHAR(128) UNIQUE NOT NULL,
-    EMAIL_VERIFIED    BOOLEAN             NOT NULL,
-    LAST_LOGIN        TIMESTAMP           NOT NULL,
-    PHONE_NUMBER      VARCHAR(128) UNIQUE NOT NULL,
-    PASSWORD          VARCHAR(128)        NOT NULL,
-    REGISTRATION_DATE TIMESTAMP           NOT NULL,
-    BIRTH_DATE        DATE                NOT NULL,
-    FIRST_NAME        VARCHAR(128),
-    LAST_NAME         VARCHAR(128),
-    IMAGE             VARCHAR(128),
-    ACTIVITY          VARCHAR(128)        NOT NULL,
-    ROLE              VARCHAR(128)        NOT NULL
+    id                BIGSERIAL PRIMARY KEY,
+    email             VARCHAR(128) UNIQUE NOT NULL,
+    email_verified    BOOLEAN             NOT NULL,
+    last_login        TIMESTAMP           NOT NULL,
+    phone_number      VARCHAR(128) UNIQUE NOT NULL,
+    password          VARCHAR(128)        NOT NULL,
+    registration_date TIMESTAMP           NOT NULL,
+    birth_date        DATE                NOT NULL,
+    first_name        VARCHAR(128),
+    last_name         VARCHAR(128),
+    image             VARCHAR(128),
+    activity          VARCHAR(128)        NOT NULL,
+    role              VARCHAR(128)        NOT NULL
 );
 
-CREATE TABLE ADDRESS
+CREATE TABLE address
 (
-    ID               BIGSERIAL PRIMARY KEY,
-    USER_ID          BIGINT       NOT NULL REFERENCES USERS (ID),
-    COUNTRY          VARCHAR(128) NOT NULL,
-    CITY             VARCHAR(128) NOT NULL,
-    STREET           VARCHAR(128) NOT NULL,
-    HOUSE_NUMBER     INT          NOT NULL,
-    APARTMENT_NUMBER INT
+    id               BIGSERIAL PRIMARY KEY,
+    user_id          BIGINT REFERENCES users (id) NOT NULL,
+    country          VARCHAR(128) NOT NULL,
+    city             VARCHAR(128) NOT NULL,
+    street           VARCHAR(128) NOT NULL,
+    house_number     INT          NOT NULL,
+    apartment_number INT
 );
 
-CREATE TABLE SHOPPING_CART
+CREATE TABLE shopping_cart
 (
-    ID           BIGSERIAL PRIMARY KEY,
-    USER_ID      BIGINT REFERENCES USERS (ID) NOT NULL,
-    ORDER_STATUS VARCHAR(128)                NOT NULL,
-    CREATE_TIME  TIMESTAMP                   NOT NULL,
-    UPDATE_TIME  TIMESTAMP                   NOT NULL
+    id           BIGSERIAL PRIMARY KEY,
+    user_id      BIGINT REFERENCES users (id) NOT NULL,
+    order_status VARCHAR(128) NOT NULL,
+    create_time  TIMESTAMP NOT NULL,
+    update_time  TIMESTAMP NOT NULL
 );
 
-CREATE TABLE SHOPPING_CART_PRODUCT
+CREATE TABLE shopping_cart_product
 (
-    ID               BIGSERIAL PRIMARY KEY,
-    SHOPPING_CART_ID BIGINT,
-    PRODUCT_ID       BIGINT,
-    COUNT_PRODUCT    INT NOT NULL CHECK (COUNT_PRODUCT > 0),
-    FOREIGN KEY (SHOPPING_CART_ID) REFERENCES SHOPPING_CART (ID),
-    FOREIGN KEY (PRODUCT_ID) REFERENCES PRODUCT (ID)
+    id               BIGSERIAL PRIMARY KEY,
+    shopping_cart_id BIGINT REFERENCES shopping_cart (id),
+    product_id       BIGINT REFERENCES product (id),
+    count_product    INT NOT NULL CHECK (count_product > 0)
 );
 
-CREATE TABLE PRODUCT
+CREATE TABLE product
 (
-    ID            BIGSERIAL PRIMARY KEY,
-    PRICE         DECIMAL CHECK (PRICE > 0) NOT NULL,
-    CREATE_AT     TIMESTAMP                 NOT NULL,
-    AVAILABLE     BOOLEAN                   NOT NULL,
-    DESCRIPTION   VARCHAR(128)              NOT NULL,
-    CATEGORY      VARCHAR(128)              NOT NULL,
-    COUNT         INT CHECK (COUNT >= 0)    NOT NULL,
-    PRODUCT_IMAGE VARCHAR(128)
+    id            BIGSERIAL PRIMARY KEY,
+    price         DECIMAL CHECK (price > 0) NOT NULL,
+    create_at     TIMESTAMP NOT NULL,
+    available     BOOLEAN NOT NULL,
+    description   VARCHAR(128) NOT NULL,
+    category      VARCHAR(128) NOT NULL,
+    count         INT CHECK (count >= 0) NOT NULL,
+    product_image VARCHAR(128)
 );
 
-CREATE TABLE PRODUCT_REVIEW
+CREATE TABLE product_review
 (
-    ID          BIGSERIAL PRIMARY KEY,
-    PRODUCT_ID  BIGINT REFERENCES PRODUCT (ID) NOT NULL,
-    CREATE_TIME TIMESTAMP                      NOT NULL,
-    USER_ID     BIGINT REFERENCES USERS (ID)   NOT NULL,
-    DESCRIPTION VARCHAR(128),
-    IMAGE       VARCHAR(128),
-    RATING      INT CHECK (RATING BETWEEN 1 AND 5) NOT NULL
+    id          BIGSERIAL PRIMARY KEY,
+    product_id  BIGINT REFERENCES product (id) NOT NULL,
+    create_time TIMESTAMP NOT NULL,
+    user_id     BIGINT REFERENCES users (id) NOT NULL,
+    description VARCHAR(128),
+    image       VARCHAR(128),
+    rating      INT CHECK (rating BETWEEN 1 AND 5) NOT NULL
 );
 
-CREATE TABLE PROMO_CODE
+CREATE TABLE promo_code
 (
-    ID                 BIGSERIAL PRIMARY KEY,
-    CODE               VARCHAR(128) UNIQUE                   NOT NULL,
-    DISCOUNT_SUM       NUMERIC CHECK (DISCOUNT_SUM >= 0)     NOT NULL,
-    REMAINING_QUANTITY INT CHECK (REMAINING_QUANTITY >= 0)   NOT NULL,
-    ACTIVITY_PROMO     BOOLEAN                               NOT NULL,
-    MIN_ORDER_AMOUNT   NUMERIC CHECK (MIN_ORDER_AMOUNT >= 0) NOT NULL,
-    VALID_TO           TIMESTAMP                             NOT NULL,
-    VALID_FROM         TIMESTAMP                             NOT NULL
+    id                 BIGSERIAL PRIMARY KEY,
+    code               VARCHAR(128) UNIQUE NOT NULL,
+    discount_sum       NUMERIC CHECK (discount_sum >= 0) NOT NULL,
+    remaining_quantity INT CHECK (remaining_quantity >= 0) NOT NULL,
+    activity_promo     BOOLEAN NOT NULL,
+    min_order_amount   NUMERIC CHECK (min_order_amount >= 0) NOT NULL,
+    valid_to           TIMESTAMP NOT NULL,
+    valid_from         TIMESTAMP NOT NULL
 );
 
-CREATE TABLE USER_PROMO_CODE
+CREATE TABLE user_promo_code
 (
-    ID            BIGSERIAL PRIMARY KEY,
-    USER_ID       BIGINT NOT NULL,
-    PROMO_CODE_ID BIGINT NOT NULL,
-    USED_AT       TIMESTAMP,
-    FOREIGN KEY (USER_ID) REFERENCES USERS (ID),
-    FOREIGN KEY (PROMO_CODE_ID) REFERENCES PROMO_CODE (ID)
+    id            BIGSERIAL PRIMARY KEY,
+    user_id       BIGINT REFERENCES users (id) NOT NULL,
+    promo_code_id BIGINT REFERENCES promo_code (id) NOT NULL,
+    used_at       TIMESTAMP
 );

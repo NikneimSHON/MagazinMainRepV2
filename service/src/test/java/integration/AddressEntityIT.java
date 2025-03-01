@@ -1,63 +1,55 @@
 package integration;
 
-import entity.*;
-import entity.embeddable.AddressInfo;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.junit.jupiter.api.*;
-import util.HibernateTestUtil;
+import com.nikita.shop.entity.AddressEntity;
+import com.nikita.shop.entity.embeddable.AddressInfo;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import util.TransactionManager;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class AddressEntityIT {
-
-    private static SessionFactory sessionFactory;
-    private Session session;
-    private Transaction transaction;
-
-
-    @BeforeAll
-    static void openSessionFactory() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
-    }
-
-    @BeforeEach
-    void openSessionAndTransaction() {
-        session = sessionFactory.openSession();
-        transaction = session.beginTransaction();
-    }
+public class AddressEntityIT extends TransactionManager {
 
     @Test
     void save() {
         var addressEntity = getAddressEntity();
 
-
         session.persist(addressEntity);
+        session.flush();
+        session.clear();
 
-        assertNotNull(addressEntity.getId());
+        var savedAddress = session.get(AddressEntity.class, addressEntity.getId());
+        Assertions.assertNotNull(savedAddress);
     }
 
     @Test
     void update() {
         var addressEntity = getAddressEntity();
         session.persist(addressEntity);
+        session.flush();
+        session.clear();
 
         var address = session.get(AddressEntity.class, addressEntity.getId());
         address.getAddressInfo().setCity("fake");
         session.merge(address);
+        session.flush();
+        session.clear();
 
         var resultAddress = session.get(AddressEntity.class, addressEntity.getId());
-        assertEquals("fake", address.getAddressInfo().getCity());
+        Assertions.assertEquals("fake", resultAddress.getAddressInfo().getCity());
     }
 
     @Test
     void delete() {
         var addressEntity = getAddressEntity();
         session.persist(addressEntity);
+        session.flush();
+        session.clear();
 
-        session.remove(addressEntity);
+        var addressToDelete = session.get(AddressEntity.class, addressEntity.getId());
+        session.remove(addressToDelete);
+        session.flush();
+        session.clear();
 
         assertNull(session.get(AddressEntity.class, addressEntity.getId()));
     }
@@ -66,28 +58,11 @@ public class AddressEntityIT {
     void get() {
         var addressEntity = getAddressEntity();
         session.persist(addressEntity);
+        session.flush();
+        session.clear();
 
         var address = session.get(AddressEntity.class, addressEntity.getId());
-
-        assertNotNull(address);
-
-    }
-
-
-    @AfterEach
-    void closeSessionAndRollbackTransaction() {
-        if (transaction != null && transaction.isActive()) {
-            transaction.rollback();
-        }
-
-        if (session != null && session.isOpen()) {
-            session.close();
-        }
-    }
-
-    @AfterAll
-    static void closeSessionFactory() {
-        sessionFactory.close();
+        Assertions.assertNotNull(address);
     }
 
     private AddressEntity getAddressEntity() {

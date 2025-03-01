@@ -1,40 +1,24 @@
 package integration;
 
-import entity.ShoppingCartEntity;
-import entity.embeddable.ShoppingCartDate;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.junit.jupiter.api.*;
-import util.HibernateTestUtil;
+import com.nikita.shop.entity.ShoppingCartEntity;
+import com.nikita.shop.entity.embeddable.ShoppingCartDate;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import util.TransactionManager;
 
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ShoppingCartEntityIT {
-    private static SessionFactory sessionFactory;
-    private Session session;
-    private Transaction transaction;
-
-
-    @BeforeAll
-    static void openSessionFactory() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
-    }
-
-    @BeforeEach
-    void openSessionAndTransaction() {
-        session = sessionFactory.openSession();
-        transaction = session.beginTransaction();
-    }
+public class ShoppingCartEntityIT extends TransactionManager {
 
     @Test
     void save() {
         ShoppingCartEntity shoppingCartEntity = getShoppingCart();
 
         session.persist(shoppingCartEntity);
+        session.flush();
+        session.clear();
 
         assertNotNull(shoppingCartEntity.getId());
     }
@@ -44,6 +28,8 @@ public class ShoppingCartEntityIT {
         ShoppingCartEntity shoppingCartEntity = getShoppingCart();
 
         session.persist(shoppingCartEntity);
+        session.flush();
+        session.clear();
 
         assertNotNull(shoppingCartEntity.getId());
     }
@@ -56,36 +42,26 @@ public class ShoppingCartEntityIT {
         var shoppingCart = session.get(ShoppingCartEntity.class, shoppingCartEntity.getId());
         shoppingCart.setOrderStatus("topFAKE");
         session.merge(shoppingCart);
+        session.flush();
+        session.clear();
 
-        assertEquals("topFAKE", shoppingCart.getOrderStatus());
+       Assertions.assertEquals("topFAKE", shoppingCart.getOrderStatus());
     }
 
     @Test
     void delete() {
         ShoppingCartEntity shoppingCartEntity = getShoppingCart();
         session.persist(shoppingCartEntity);
+        session.flush();
+        session.clear();
 
         session.remove(shoppingCartEntity);
+        session.flush();
+        session.clear();
 
-        assertNull(session.get(ShoppingCartEntity.class, shoppingCartEntity.getId()));
+        Assertions.assertNull(session.get(ShoppingCartEntity.class, shoppingCartEntity.getId()));
     }
 
-
-    @AfterEach
-    void closeSessionAndRollbackTransaction() {
-        if (transaction != null && transaction.isActive()) {
-            transaction.rollback();
-        }
-
-        if (session != null && session.isOpen()) {
-            session.close();
-        }
-    }
-
-    @AfterAll
-    static void closeSessionFactory() {
-        sessionFactory.close();
-    }
 
     private ShoppingCartEntity getShoppingCart() {
         return ShoppingCartEntity.builder()

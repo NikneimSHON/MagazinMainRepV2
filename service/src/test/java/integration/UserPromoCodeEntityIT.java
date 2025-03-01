@@ -1,42 +1,25 @@
 package integration;
 
-import entity.AddressEntity;
-import entity.PromoCodeEntity;
-import entity.UserEntity;
-import entity.UserPromoCodeEntity;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.junit.jupiter.api.*;
-import util.HibernateTestUtil;
+import com.nikita.shop.entity.PromoCodeEntity;
+import com.nikita.shop.entity.UserEntity;
+import com.nikita.shop.entity.UserPromoCodeEntity;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import util.TransactionManager;
 
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class UserPromoCodeEntityIT {
-    private static SessionFactory sessionFactory;
-    private Session session;
-    private Transaction transaction;
-
-
-    @BeforeAll
-    static void openSessionFactory() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
-    }
-
-    @BeforeEach
-    void openSessionAndTransaction() {
-        session = sessionFactory.openSession();
-        transaction = session.beginTransaction();
-    }
+public class UserPromoCodeEntityIT extends TransactionManager {
 
     @Test
     void save() {
         var userPromoCodeEntity = getUserPromoCodeEntity();
 
         session.persist(userPromoCodeEntity);
+        session.flush();
+        session.clear();
 
         assertNotNull(userPromoCodeEntity.getId());
     }
@@ -46,6 +29,8 @@ public class UserPromoCodeEntityIT {
         var userPromoCodeEntity = getUserPromoCodeEntity();
 
         session.persist(userPromoCodeEntity);
+        session.flush();
+        session.clear();
         var promoCodeEntity = session.get(UserPromoCodeEntity.class, userPromoCodeEntity.getId());
 
         assertNotNull(promoCodeEntity);
@@ -56,43 +41,34 @@ public class UserPromoCodeEntityIT {
         var userPromoCodeEntity = getUserPromoCodeEntity();
 
         session.persist(userPromoCodeEntity);
+        session.flush();
+        session.clear();
         session.remove(userPromoCodeEntity);
+        session.flush();
+        session.clear();
 
-        assertNull(session.get(UserPromoCodeEntity.class, userPromoCodeEntity.getId()));
+        Assertions.assertNull(session.get(UserPromoCodeEntity.class, userPromoCodeEntity.getId()));
     }
 
     @Test
     void update() {
         var userPromoCodeEntity = getUserPromoCodeEntity();
         session.persist(userPromoCodeEntity);
+        session.flush();
+        session.clear();
         String timestamp = "2023-10-05T12:34:56Z";
         Instant instant = Instant.parse(timestamp);
 
         var promoCodeEntity = session.get(UserPromoCodeEntity.class, userPromoCodeEntity.getId());
         promoCodeEntity.setUsedAt(instant);
         session.merge(promoCodeEntity);
+        session.flush();
+        session.clear();
 
         var resultPromoCodeEntity = session.get(UserPromoCodeEntity.class, userPromoCodeEntity.getId());
         assertNotNull(resultPromoCodeEntity);
-        assertEquals(timestamp, resultPromoCodeEntity.getUsedAt().toString());
+        Assertions.assertEquals(timestamp, resultPromoCodeEntity.getUsedAt().toString());
 
-    }
-
-
-    @AfterEach
-    void closeSessionAndRollbackTransaction() {
-        if (transaction != null && transaction.isActive()) {
-            transaction.rollback();
-        }
-
-        if (session != null && session.isOpen()) {
-            session.close();
-        }
-    }
-
-    @AfterAll
-    static void closeSessionFactory() {
-        sessionFactory.close();
     }
 
     private UserPromoCodeEntity getUserPromoCodeEntity() {

@@ -12,15 +12,15 @@
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
 
-        <mapping class="entity.UserEntity"/>
-        <mapping class="entity.AddressEntity"/>
-        <mapping class="entity.Role"/>
-        <mapping class="entity.ActivityType"/>
-        <mapping class="entity.PromoCodeEntity"/>
-        <mapping class="entity.UserPromoCodeEntity"/>
-        <mapping class="entity.ProductEntity"/>
-        <mapping class="entity.ProductReviewEntity"/>
-        <mapping class="entity.ShoppingCartProductEntity"/>
-        <mapping class="entity.ShoppingCartEntity"/>
+        <mapping class="com.nikita.shop.entity.UserEntity"/>
+        <mapping class="com.nikita.shop.entity.AddressEntity"/>
+        <mapping class="com.nikita.shop.entity.Role"/>
+        <mapping class="com.nikita.shop.entity.ActivityType"/>
+        <mapping class="com.nikita.shop.entity.PromoCodeEntity"/>
+        <mapping class="com.nikita.shop.entity.UserPromoCodeEntity"/>
+        <mapping class="com.nikita.shop.entity.ProductEntity"/>
+        <mapping class="com.nikita.shop.entity.ProductReviewEntity"/>
+        <mapping class="com.nikita.shop.entity.ShoppingCartProductEntity"/>
+        <mapping class="com.nikita.shop.entity.ShoppingCartEntity"/>
     </session-factory>
 </hibernate-configuration>
