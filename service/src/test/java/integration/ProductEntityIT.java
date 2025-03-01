@@ -1,6 +1,7 @@
 package integration;
 
 import com.nikita.shop.entity.ProductEntity;
+import com.nikita.shop.entity.embeddable.ProductCategory;
 import com.nikita.shop.entity.embeddable.ProductInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -74,7 +75,7 @@ public class ProductEntityIT extends TransactionManager {
                 .productInfo(ProductInfo.builder()
                         .price(new BigDecimal("100"))
                         .productImage("f")
-                        .category("f")
+                        .category(ProductCategory.BABY_PRODUCTS)
                         .count(4)
                         .description("fa")
                         .build())
