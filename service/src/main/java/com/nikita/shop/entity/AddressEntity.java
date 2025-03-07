@@ -1,6 +1,7 @@
 package com.nikita.shop.entity;
 
 import com.nikita.shop.entity.embeddable.AddressInfo;
+
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

@@ -40,6 +40,7 @@ public class ProductEntity {
     @Embedded
     private ProductInfo productInfo;
 
+    @Builder.Default
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ShoppingCartProductEntity> shoppingCartProducts = new ArrayList<>();
 

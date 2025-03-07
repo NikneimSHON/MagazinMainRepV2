@@ -44,6 +44,7 @@ public class ShoppingCartEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    @Builder.Default
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<ShoppingCartProductEntity> shoppingCartProducts = new ArrayList<>();
 

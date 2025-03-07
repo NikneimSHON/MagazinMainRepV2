@@ -1,6 +1,5 @@
 package com.nikita.shop.entity.embeddable;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
