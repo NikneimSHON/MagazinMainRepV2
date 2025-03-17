@@ -11,25 +11,38 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NamedEntityGraph(
+        name = "WithFirstNameAndLastName",
+        attributeNodes = {
+                @NamedAttributeNode("personalInfo")
+        }
+)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 @EqualsAndHashCode(exclude = {"addresses", "userPromoCode", "shoppingCarts", "productReviews"})
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +58,9 @@ public class UserEntity {
     private UserCredentials credentials;
     @Embedded
     private UserActivity activity;
+
+    @Version
+    private Long version;
 
     @Builder.Default
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)

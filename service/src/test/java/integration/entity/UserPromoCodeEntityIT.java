@@ -1,4 +1,4 @@
-package integration;
+package integration.entity;
 
 import com.nikita.shop.entity.PromoCodeEntity;
 import com.nikita.shop.entity.UserEntity;

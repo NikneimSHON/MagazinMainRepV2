@@ -1,4 +1,4 @@
-package integration;
+package integration.entity;
 
 import com.nikita.shop.entity.PromoCodeEntity;
 
@@ -70,10 +70,10 @@ public class PromoCodeEntityIT extends TransactionManager {
     private PromoCodeEntity getPromoCodeEntity() {
         return PromoCodeEntity.builder()
                 .code("1")
-                .discountSum(BigDecimal.valueOf(10))
+                .discountSum(10)
                 .remainingQuantity(10)
                 .activityPromo(true)
-                .minOrderAmount(BigDecimal.valueOf(10))
+                .minOrderAmount(10)
                 .validTo(Instant.now())
                 .validFrom(Instant.now())
                 .build();

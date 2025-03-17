@@ -1,4 +1,4 @@
-package com.nikita.shop.dao;
+package com.nikita.shop.repository;
 
 import java.util.ArrayList;
 import java.util.List;

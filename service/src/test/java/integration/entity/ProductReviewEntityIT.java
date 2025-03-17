@@ -1,6 +1,6 @@
-package integration;
+package integration.entity;
 
-import com.nikita.shop.entity.ActivityType;
+import com.nikita.shop.entity.Activity;
 import com.nikita.shop.entity.ProductReviewEntity;
 import com.nikita.shop.entity.Role;
 import com.nikita.shop.entity.UserEntity;
@@ -100,7 +100,7 @@ public class ProductReviewEntityIT extends TransactionManager {
                         .build())
                 .activity(UserActivity.builder()
                         .registrationDate(Instant.now())
-                        .activity(ActivityType.ALLOWED)
+                        .activity(Activity.ALLOWED)
                         .lastLogin(Instant.now())
                         .build())
                 .build();

@@ -10,8 +10,12 @@ import lombok.Value;
 @Value
 @Builder
 public class ProductFilter {
+    String productName;
+    String description;
+    ProductCategory category;
+    int maxCount;
+    int minCount;
     int minPrice;
     int maxPrice;
-    ProductCategory category;
-
+    boolean available;
 }

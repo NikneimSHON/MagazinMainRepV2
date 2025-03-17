@@ -1,4 +1,4 @@
-package integration;
+package integration.entity;
 
 import com.nikita.shop.entity.AddressEntity;
 import com.nikita.shop.entity.embeddable.AddressInfo;

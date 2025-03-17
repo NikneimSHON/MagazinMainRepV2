@@ -1,5 +1,6 @@
-package integration;
+package integration.entity;
 
+import com.nikita.shop.entity.OrderStatus;
 import com.nikita.shop.entity.ShoppingCartEntity;
 import com.nikita.shop.entity.embeddable.ShoppingCartDate;
 import org.junit.jupiter.api.Assertions;
@@ -40,7 +41,7 @@ public class ShoppingCartEntityIT extends TransactionManager {
         session.persist(shoppingCartEntity);
 
         var shoppingCart = session.get(ShoppingCartEntity.class, shoppingCartEntity.getId());
-        shoppingCart.setOrderStatus("topFAKE");
+        shoppingCart.setOrderStatus(OrderStatus.ASSEMBLY);
         session.merge(shoppingCart);
         session.flush();
         session.clear();
@@ -65,10 +66,10 @@ public class ShoppingCartEntityIT extends TransactionManager {
 
     private ShoppingCartEntity getShoppingCart() {
         return ShoppingCartEntity.builder()
-                .orderStatus("f")
+                .orderStatus(OrderStatus.ASSEMBLY)
                 .shoppingCartDate(ShoppingCartDate.builder()
                         .updateTime(Instant.now())
-                        .creationTime(Instant.now())
+                        .creatTime(Instant.now())
                         .build())
                 .build();
     }

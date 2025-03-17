@@ -8,6 +8,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+@NamedEntityGraph(name = "WithPriceAndCategoryAndAvailable"
+        , attributeNodes = {@NamedAttributeNode("productInfo"), @NamedAttributeNode("available")}
+
+)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,7 +33,7 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode(exclude = {"shoppingCartProducts", "productReviews"})
 @Table(name = "product")
-public class ProductEntity {
+public class ProductEntity implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,8 @@
-package integration;
+package integration.entity;
 
-import com.nikita.shop.entity.ActivityType;
+import com.nikita.shop.entity.Activity;
 import com.nikita.shop.entity.AddressEntity;
+import com.nikita.shop.entity.OrderStatus;
 import com.nikita.shop.entity.ProductReviewEntity;
 import com.nikita.shop.entity.PromoCodeEntity;
 import com.nikita.shop.entity.Role;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import util.TransactionManager;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 
@@ -252,7 +252,7 @@ public class UserEntityIT extends TransactionManager {
                         .build())
                 .activity(UserActivity.builder()
                         .registrationDate(Instant.now())
-                        .activity(ActivityType.ALLOWED)
+                        .activity(Activity.ALLOWED)
                         .lastLogin(Instant.now())
                         .build())
                 .build();
@@ -261,10 +261,10 @@ public class UserEntityIT extends TransactionManager {
     private PromoCodeEntity getPromoCodeEntity() {
         return PromoCodeEntity.builder()
                 .code("1")
-                .discountSum(BigDecimal.valueOf(10))
+                .discountSum(10)
                 .remainingQuantity(10)
                 .activityPromo(true)
-                .minOrderAmount(BigDecimal.valueOf(10))
+                .minOrderAmount(10)
                 .validTo(Instant.now())
                 .validFrom(Instant.now())
                 .build();
@@ -291,10 +291,10 @@ public class UserEntityIT extends TransactionManager {
     private ShoppingCartEntity getShoppingCartEntity() {
         return ShoppingCartEntity.builder()
                 .shoppingCartDate(ShoppingCartDate.builder()
-                        .creationTime(Instant.now())
+                        .creatTime(Instant.now())
                         .updateTime(Instant.now())
                         .build())
-                .orderStatus("f")
+                .orderStatus(OrderStatus.ASSEMBLY)
                 .build();
     }
 

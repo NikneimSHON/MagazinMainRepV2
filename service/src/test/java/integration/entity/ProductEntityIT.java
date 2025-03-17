@@ -1,4 +1,4 @@
-package integration;
+package integration.entity;
 
 import com.nikita.shop.entity.ProductEntity;
 import com.nikita.shop.entity.embeddable.ProductCategory;
@@ -73,7 +73,7 @@ public class ProductEntityIT extends TransactionManager {
     private ProductEntity getProduct() {
         return ProductEntity.builder()
                 .productInfo(ProductInfo.builder()
-                        .price(new BigDecimal("100"))
+                        .price(100)
                         .productImage("f")
                         .category(ProductCategory.BABY_PRODUCTS)
                         .count(4)
