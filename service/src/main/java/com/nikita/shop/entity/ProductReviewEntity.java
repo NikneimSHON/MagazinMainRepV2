@@ -22,7 +22,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "product_review")
-public class ProductReviewEntity {
+public class ProductReviewEntity implements BaseEntity<Long> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,11 +31,11 @@ public class ProductReviewEntity {
     @Embedded
     private ProductReviewInfo productReviewInfo;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
 

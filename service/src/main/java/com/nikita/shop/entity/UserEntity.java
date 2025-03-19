@@ -75,9 +75,8 @@ public class UserEntity implements BaseEntity<Long> {
     private List<ShoppingCartEntity> shoppingCarts = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<ProductReviewEntity> productReviews = new ArrayList<>();
-
 
     public void addAddress(AddressEntity address) {
         addresses.add(address);
@@ -93,7 +92,6 @@ public class UserEntity implements BaseEntity<Long> {
         productReviews.add(productReview);
         productReview.setUser(this);
     }
-
 
     @Override
     public String toString() {

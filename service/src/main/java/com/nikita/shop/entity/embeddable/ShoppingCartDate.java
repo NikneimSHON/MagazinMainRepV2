@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 @Builder
 @Embeddable
 public class ShoppingCartDate {
-    private Instant creationTime;
+    @Column(name = "create_time")
+    private Instant creatTime;
+
+    @Column(name = "update_time")
     private Instant updateTime;
 }

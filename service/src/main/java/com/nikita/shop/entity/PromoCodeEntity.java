@@ -24,7 +24,7 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode(exclude = "userPromoCode")
 @Table(name = "promo_code")
-public class PromoCodeEntity {
+public class PromoCodeEntity implements BaseEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +32,8 @@ public class PromoCodeEntity {
     private int remainingQuantity;
     private String code;
     private boolean activityPromo;
-    private BigDecimal discountSum;
-    private BigDecimal minOrderAmount;
+    private Integer discountSum;
+    private Integer minOrderAmount;
     private Instant validFrom;
     private Instant validTo;
 

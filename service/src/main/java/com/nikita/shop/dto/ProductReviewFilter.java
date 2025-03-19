@@ -10,8 +10,7 @@ import java.time.Instant;
 @Value
 @Builder
 public class ProductReviewFilter {
-    ProductFilter productFilter;
-    UserEntity user;
+    Long userId;
     Integer rating;
     Instant beforeCreateTime;
     Instant afterCreateTime;

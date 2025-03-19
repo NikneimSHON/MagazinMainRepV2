@@ -15,6 +15,6 @@ public class AddressInfo {
     private String country;
     private String city;
     private String street;
-    private int houseNumber;
-    private int apartmentNumber;
+    private Integer houseNumber;
+    private Integer apartmentNumber;
 }

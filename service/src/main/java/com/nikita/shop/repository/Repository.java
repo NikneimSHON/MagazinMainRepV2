@@ -14,9 +14,6 @@ public interface Repository<K extends Serializable, E extends BaseEntity<K>> {
 
     void update(E entity);
 
-    //default Optional<E> findById(K id) {
-    //  return
-    //}
     Optional<E> findById(K id);
 
     List<E> findAll();

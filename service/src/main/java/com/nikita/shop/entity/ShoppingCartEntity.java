@@ -4,6 +4,8 @@ import com.nikita.shop.entity.embeddable.ShoppingCartDate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,13 +31,14 @@ import jakarta.persistence.Table;
 @Entity
 @EqualsAndHashCode(exclude = {"shoppingCartProducts"})
 @Table(name = "shopping_cart")
-public class ShoppingCartEntity {
+public class ShoppingCartEntity implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String orderStatus;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     @Embedded
     private ShoppingCartDate shoppingCartDate;

@@ -10,7 +10,7 @@ import java.time.Instant;
 @Builder
 public class ShoppingCartFilter {
     OrderStatus status;
-    UserEntity user;
+    Long userId;
     Instant beforeCreateTime;
     Instant afterCreateTime;
 }

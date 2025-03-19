@@ -18,15 +18,15 @@ public class AddressRepository extends RepositoryBase<Long, AddressEntity> {
         super(entityManager, AddressEntity.class);
     }
 
-    public List<AddressEntity> findAddressWithFilterUserAndCityAndStreetAndApartAndHouseNumAndCounty(EntityManager entityManager, AddressFilter filter, int limit, int offset) {
+    public List<AddressEntity> findAddressWithFilter(EntityManager entityManager, AddressFilter filter, int limit, int offset) {
         var predicate = QPredicate.builder()
                 .add(filter.getCity(), addressEntity.addressInfo.city::eq)
                 .add(filter.getStreet(), addressEntity.addressInfo.street::eq)
-                .add(filter.getUser(), addressEntity.user::eq)
+                .add(filter.getUserId(), addressEntity.user.id::eq)
                 .add(filter.getHouseNumber(), addressEntity.addressInfo.houseNumber::eq)
                 .add(filter.getApartmentNumber(), addressEntity.addressInfo.apartmentNumber::eq)
                 .add(filter.getCountry(), addressEntity.addressInfo.country::eq)
-                .buildOr();
+                .buildAnd();
         return new JPAQuery<AddressEntity>(entityManager)
                 .select(addressEntity)
                 .from(addressEntity)

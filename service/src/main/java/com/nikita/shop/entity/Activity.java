@@ -1,6 +1,9 @@
 package com.nikita.shop.entity;
 
-public enum ActivityType {
+import lombok.ToString;
+
+@ToString
+public enum Activity {
     ALLOWED,
     BLOCKED,
 }

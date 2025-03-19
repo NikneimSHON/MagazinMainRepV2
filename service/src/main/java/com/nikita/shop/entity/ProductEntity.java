@@ -47,11 +47,11 @@ public class ProductEntity implements BaseEntity<Long> {
     private ProductInfo productInfo;
 
     @Builder.Default
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ShoppingCartProductEntity> shoppingCartProducts = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
     private List<ProductReviewEntity> productReviews = new ArrayList<>();
 
     @Override

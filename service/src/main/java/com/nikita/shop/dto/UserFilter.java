@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @Builder
 public class UserFilter {
     String email;
-    boolean email_verified;
     String phoneNumber;
     LocalDate beforeBirthday;
     LocalDate afterBirthday;

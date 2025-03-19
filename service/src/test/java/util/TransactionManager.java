@@ -8,8 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-
-public class TransactionManager {
+public abstract class TransactionManager {
 
     private static SessionFactory sessionFactory;
     protected Session session;

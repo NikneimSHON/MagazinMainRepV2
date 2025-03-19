@@ -1,6 +1,6 @@
 package com.nikita.shop.util;
 
-import com.nikita.shop.entity.ActivityType;
+import com.nikita.shop.entity.Activity;
 import com.nikita.shop.entity.AddressEntity;
 import com.nikita.shop.entity.ProductEntity;
 import com.nikita.shop.entity.ProductReviewEntity;
@@ -37,7 +37,7 @@ public class HibernateUtil {
         configuration.addAnnotatedClass(ShoppingCartEntity.class);
         configuration.addAnnotatedClass(ShoppingCartProductEntity.class);
         configuration.addAnnotatedClass(Role.class);
-        configuration.addAnnotatedClass(ActivityType.class);
+        configuration.addAnnotatedClass(Activity.class);
 
         return configuration;
     }

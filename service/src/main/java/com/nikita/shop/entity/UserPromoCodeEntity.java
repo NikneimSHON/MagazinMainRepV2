@@ -22,7 +22,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 @Table(name = "user_promo_code")
-public class UserPromoCodeEntity {
+public class UserPromoCodeEntity implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

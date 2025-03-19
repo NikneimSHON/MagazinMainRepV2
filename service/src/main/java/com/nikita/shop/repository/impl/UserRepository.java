@@ -19,17 +19,16 @@ public class UserRepository extends RepositoryBase<Long, UserEntity> {
         super(entityManager, UserEntity.class);
     }
 
-    public List<UserEntity> findUsersWithFilterFirstAndLastNameAndEmailAndPhoneNumAndBirthDayAndActivityAndRole(EntityManager entityManager, UserFilter filter, int limit, int offset) {
+    public List<UserEntity> findUserWithFilter(EntityManager entityManager, UserFilter filter, int limit, int offset) {
         var predicate = QPredicate.builder()
                 .add(filter.getFirstName(), userEntity.personalInfo.firstname::eq)
                 .add(filter.getLastName(), userEntity.personalInfo.lastname::eq)
-                .add(filter.isEmail_verified(), userEntity.credentials.emailVerified::eq)
                 .add(filter.getPhoneNumber(), userEntity.phoneNumber::eq)
                 .add(filter.getBeforeBirthday(), userEntity.personalInfo.birthDate::loe)
                 .add(filter.getAfterBirthday(), userEntity.personalInfo.birthDate::goe)
                 .add(filter.getActivity(), userEntity.activity.activity::eq)
                 .add(filter.getRole(), userEntity.role::eq)
-                .buildOr();
+                .buildAnd();
 
         return new JPAQuery<UserEntity>(entityManager)
                 .select(userEntity)

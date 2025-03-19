@@ -1,9 +1,9 @@
-package unit;
+package integration.entity;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class AppTest {
+public class AppIT {
 
     @Test
     public void test() {

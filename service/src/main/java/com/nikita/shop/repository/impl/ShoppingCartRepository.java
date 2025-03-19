@@ -11,6 +11,8 @@ import com.querydsl.core.Tuple;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.nikita.shop.entity.QProductEntity.productEntity;
 import static com.nikita.shop.entity.QShoppingCartEntity.shoppingCartEntity;
@@ -22,14 +24,13 @@ public class ShoppingCartRepository extends RepositoryBase<Long, ShoppingCartEnt
         super(entityManager, ShoppingCartEntity.class);
     }
 
-    public List<ShoppingCartEntity> findShoppingCartFilterWithCreateTimeAndStatus(EntityManager entityManager, ShoppingCartFilter filter, int offset, int limit) {
+    public List<ShoppingCartEntity> findShoppingCartWithFilter(EntityManager entityManager, ShoppingCartFilter filter, int offset, int limit) {
         var predicate = QPredicate.builder()
-                .add(filter.getUser(), shoppingCartEntity.user::eq)
                 .add(filter.getStatus(), shoppingCartEntity.orderStatus::eq)
                 .add(filter.getBeforeCreateTime(), shoppingCartEntity.shoppingCartDate.creatTime::loe)
                 .add(filter.getAfterCreateTime(), shoppingCartEntity.shoppingCartDate.creatTime::goe)
-                .add(filter.getUser(), shoppingCartEntity.user::eq)
-                .buildOr();
+                .add(filter.getUserId(), shoppingCartEntity.user.id::eq)
+                .buildAnd();
         return new JPAQuery<ShoppingCartEntity>(entityManager)
                 .select(shoppingCartEntity)
                 .from(shoppingCartEntity)
@@ -48,7 +49,7 @@ public class ShoppingCartRepository extends RepositoryBase<Long, ShoppingCartEnt
                 .fetch();
     }
 
-    public HashMap<Long, Long> findUserAndShoppingCartWithProductID(EntityManager entityManager, ProductEntity productEntity) {
+    public Map<Long, Long> findUserAndShoppingCartByProductID(EntityManager entityManager, ProductEntity productEntity) {
         List<Tuple> results = new JPAQuery<Tuple>(entityManager)
                 .select(userEntity.id, shoppingCartEntity.id)
                 .from(shoppingCartProductEntity)
@@ -57,14 +58,16 @@ public class ShoppingCartRepository extends RepositoryBase<Long, ShoppingCartEnt
                 .where(shoppingCartProductEntity.product.id.eq(productEntity.getId()))
                 .fetch();
 
-        HashMap<Long, Long> userCartMap = new HashMap<>();
-        for (Tuple tuple : results) {
-            Long userId = tuple.get(userEntity.id);
-            Long cartId = tuple.get(shoppingCartEntity.id);
-            userCartMap.put(userId, cartId);
+        if (!results.isEmpty()) {
+            return results.stream()
+                    .collect(Collectors.toMap(
+                            tuple -> tuple.get(userEntity.id),
+                            tuple -> tuple.get(shoppingCartEntity.id)
+                    ));
         }
+        return null;
 
-        return userCartMap;
+
     }
 
 

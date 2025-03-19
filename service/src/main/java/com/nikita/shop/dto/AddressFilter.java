@@ -10,7 +10,7 @@ public class AddressFilter {
     String country;
     String city;
     String street;
-    int houseNumber;
-    int apartmentNumber;
-    UserEntity user;
+    Integer houseNumber;
+    Integer apartmentNumber;
+    Long userId;
 }

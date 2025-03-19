@@ -16,10 +16,11 @@ import java.math.BigDecimal;
 @Builder
 @Embeddable
 public class ProductInfo {
-    private BigDecimal price;
+    private String name;
+    private Integer price;
     private String description;
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
-    private int count;
+    private Integer count;
     private String productImage;
 }

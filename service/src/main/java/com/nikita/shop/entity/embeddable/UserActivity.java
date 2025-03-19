@@ -1,6 +1,6 @@
 package com.nikita.shop.entity.embeddable;
 
-import com.nikita.shop.entity.ActivityType;
+import com.nikita.shop.entity.Activity;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,5 +20,5 @@ public class UserActivity {
     private Instant lastLogin;
     private Instant registrationDate;
     @Enumerated(EnumType.STRING)
-    private ActivityType activity;
+    private Activity activity;
 }

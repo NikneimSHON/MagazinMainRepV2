@@ -23,7 +23,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "address")
-public class AddressEntity {
+public class AddressEntity implements BaseEntity<Long> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,7 +35,6 @@ public class AddressEntity {
 
     @Embedded
     private AddressInfo addressInfo;
-
 
     @Override
     public String toString() {

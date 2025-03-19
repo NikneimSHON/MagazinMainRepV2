@@ -15,7 +15,7 @@ public class PromoCodeRepository extends RepositoryBase<Long, PromoCodeEntity> {
         super(entityManager, PromoCodeEntity.class);
     }
 
-    public List<PromoCodeEntity> findPromoCodeWithFilterActivityAndDiscountSumAndMinOrderAmountAndValidDate(EntityManager entityManager, PromoCodeFilter filter, int limit, int offset) {
+    public List<PromoCodeEntity> findPromoCodeWithFilter(EntityManager entityManager, PromoCodeFilter filter, int limit, int offset) {
         var predicate = QPredicate.builder()
                 .add(filter.isActivityPromo(), promoCodeEntity.activityPromo::eq)
                 .add(filter.getMinOrderAmount(), promoCodeEntity.minOrderAmount::goe)
@@ -23,7 +23,7 @@ public class PromoCodeRepository extends RepositoryBase<Long, PromoCodeEntity> {
                 .add(filter.getValidFrom(), promoCodeEntity.validFrom::goe)
                 .add(filter.getMinDiscountSum(), promoCodeEntity.discountSum::goe)
                 .add(filter.getMaxDiscountSum(), promoCodeEntity.discountSum::loe)
-                .buildOr();
+                .buildAnd();
 
         return new JPAQuery<PromoCodeEntity>(entityManager)
                 .select(promoCodeEntity)

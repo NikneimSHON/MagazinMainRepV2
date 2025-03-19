@@ -13,9 +13,9 @@ public class ProductFilter {
     String productName;
     String description;
     ProductCategory category;
-    int maxCount;
-    int minCount;
-    int minPrice;
-    int maxPrice;
+    Integer maxCount;
+    Integer minCount;
+    Integer minPrice;
+    Integer maxPrice;
     boolean available;
 }
