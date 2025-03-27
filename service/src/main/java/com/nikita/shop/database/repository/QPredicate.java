@@ -1,4 +1,4 @@
-package com.nikita.shop.repository;
+package com.nikita.shop.database.repository;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,9 @@
-package com.nikita.shop.repository.impl;
+package com.nikita.shop.database.repository.impl;
 
 import com.nikita.shop.dto.AddressFilter;
 import com.nikita.shop.entity.AddressEntity;
-import com.nikita.shop.repository.QPredicate;
-import com.nikita.shop.repository.RepositoryBase;
+import com.nikita.shop.database.repository.QPredicate;
+import com.nikita.shop.database.repository.RepositoryBase;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 

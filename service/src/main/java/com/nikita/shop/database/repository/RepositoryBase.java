@@ -1,4 +1,4 @@
-package com.nikita.shop.repository;
+package com.nikita.shop.database.repository;
 
 import com.nikita.shop.entity.BaseEntity;
 import jakarta.persistence.EntityManager;

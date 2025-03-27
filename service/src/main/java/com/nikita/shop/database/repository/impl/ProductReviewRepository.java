@@ -1,14 +1,9 @@
-package com.nikita.shop.repository.impl;
+package com.nikita.shop.database.repository.impl;
 
-import com.nikita.shop.dto.ProductFilter;
 import com.nikita.shop.dto.ProductReviewFilter;
-import com.nikita.shop.dto.UserFilter;
-import com.nikita.shop.entity.ProductEntity;
 import com.nikita.shop.entity.ProductReviewEntity;
-import com.nikita.shop.entity.UserEntity;
-import com.nikita.shop.entity.embeddable.ProductCategory;
-import com.nikita.shop.repository.QPredicate;
-import com.nikita.shop.repository.RepositoryBase;
+import com.nikita.shop.database.repository.QPredicate;
+import com.nikita.shop.database.repository.RepositoryBase;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 
