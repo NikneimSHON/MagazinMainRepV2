@@ -1,16 +1,21 @@
 package com.nikita.shop.database.repository.impl;
+
 import com.nikita.shop.dto.PromoCodeFilter;
-import com.nikita.shop.entity.PromoCodeEntity;
+import com.nikita.shop.database.entity.PromoCodeEntity;
 import com.nikita.shop.database.repository.QPredicate;
 import com.nikita.shop.database.repository.RepositoryBase;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Repository;
+
+import static com.nikita.shop.database.entity.QPromoCodeEntity.promoCodeEntity;
 
 import java.util.List;
 
-import static com.nikita.shop.entity.QPromoCodeEntity.promoCodeEntity;
 
+@Repository
 public class PromoCodeRepository extends RepositoryBase<Long, PromoCodeEntity> {
+
     public PromoCodeRepository(EntityManager entityManager) {
         super(entityManager, PromoCodeEntity.class);
     }

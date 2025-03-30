@@ -11,15 +11,15 @@
         <property name="hibernate.hbm2ddl.auto">create</property>
         <property name="hibernate.current_session_context_class">thread</property>
 
-        <mapping class="com.nikita.shop.entity.UserEntity"/>
-        <mapping class="com.nikita.shop.entity.AddressEntity"/>
-        <mapping class="com.nikita.shop.entity.Role"/>
-        <mapping class="com.nikita.shop.entity.Activity"/>
-        <mapping class="com.nikita.shop.entity.PromoCodeEntity"/>
-        <mapping class="com.nikita.shop.entity.UserPromoCodeEntity"/>
-        <mapping class="com.nikita.shop.entity.ProductEntity"/>
-        <mapping class="com.nikita.shop.entity.ProductReviewEntity"/>
-        <mapping class="com.nikita.shop.entity.ShoppingCartProductEntity"/>
-        <mapping class="com.nikita.shop.entity.ShoppingCartEntity"/>
+        <mapping class="com.nikita.shop.database.entity.UserEntity"/>
+        <mapping class="com.nikita.shop.database.entity.AddressEntity"/>
+        <mapping class="com.nikita.shop.database.entity.Role"/>
+        <mapping class="com.nikita.shop.database.entity.Activity"/>
+        <mapping class="com.nikita.shop.database.entity.PromoCodeEntity"/>
+        <mapping class="com.nikita.shop.database.entity.UserPromoCodeEntity"/>
+        <mapping class="com.nikita.shop.database.entity.ProductEntity"/>
+        <mapping class="com.nikita.shop.database.entity.ProductReviewEntity"/>
+        <mapping class="com.nikita.shop.database.entity.ShoppingCartProductEntity"/>
+        <mapping class="com.nikita.shop.database.entity.ShoppingCartEntity"/>
     </session-factory>
 </hibernate-configuration>

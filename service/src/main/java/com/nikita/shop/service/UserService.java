@@ -1,14 +1,14 @@
 package com.nikita.shop.service;
 
-import com.nikita.shop.database.repository.impl.AddressRepository;
-import com.nikita.shop.database.repository.impl.UserRepository;
+import com.nikita.shop.database.repository.Repository;
+import com.nikita.shop.database.entity.UserEntity;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserService {
-    private final UserRepository userRepository;
-    private final AddressRepository addressRepository;
+    private final Repository<Long, UserEntity> userRepository;
 
-    public UserService(UserRepository userRepository, AddressRepository addressRepository) {
+    public UserService(Repository<Long, UserEntity> userRepository) {
         this.userRepository = userRepository;
-        this.addressRepository = addressRepository;
     }
 }

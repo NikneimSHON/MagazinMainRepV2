@@ -1,51 +1,35 @@
 package util;
 
+import config.ApplicationTestConfiguration;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public abstract class TransactionManager {
 
-    private static SessionFactory sessionFactory;
-    protected Session session;
+    protected Session session = context.getBean(Session.class);
     protected Transaction transaction;
+    protected static final AnnotationConfigApplicationContext context;
 
-    @BeforeAll
-    static void openSessionFactory() {
-        if (sessionFactory == null) {
-            sessionFactory = HibernateTestUtil.buildSessionFactory();
-        }
+    static {
+        context = new AnnotationConfigApplicationContext(ApplicationTestConfiguration.class);
     }
 
     @BeforeEach
     void openSessionAndTransaction() {
-        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
     }
-
+        // проблема, я хлтел убрать методы openSessionAndTransaction и closeSessionAndRollbackTransaction
+    // и указывать просто @Transaction в RepositoryBase но для критерии, которая используется нужна активная транзакция,
+    // и получается тест падает, что в таком случае сделать можно? переписать прокси?
     @AfterEach
     void closeSessionAndRollbackTransaction() {
         if (transaction != null && transaction.isActive()) {
             transaction.rollback();
         }
 
-        if (session != null && session.isOpen()) {
-            session.close();
-        }
-
-        session = null;
-        transaction = null;
     }
 
-    @AfterAll
-    static void closeSessionFactory() {
-        if (sessionFactory != null) {
-            sessionFactory.close();
-            sessionFactory = null;
-        }
-    }
 }

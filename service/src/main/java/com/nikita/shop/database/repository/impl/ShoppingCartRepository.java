@@ -1,24 +1,27 @@
 package com.nikita.shop.database.repository.impl;
 
 import com.nikita.shop.dto.ShoppingCartFilter;
-import com.nikita.shop.entity.ProductEntity;
-import com.nikita.shop.entity.ShoppingCartEntity;
+import com.nikita.shop.database.entity.ProductEntity;
+import com.nikita.shop.database.entity.ShoppingCartEntity;
 import com.nikita.shop.database.repository.QPredicate;
 import com.nikita.shop.database.repository.RepositoryBase;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import com.querydsl.core.Tuple;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.nikita.shop.entity.QProductEntity.productEntity;
-import static com.nikita.shop.entity.QShoppingCartEntity.shoppingCartEntity;
-import static com.nikita.shop.entity.QShoppingCartProductEntity.shoppingCartProductEntity;
-import static com.nikita.shop.entity.QUserEntity.userEntity;
+import static com.nikita.shop.database.entity.QProductEntity.productEntity;
+import static com.nikita.shop.database.entity.QShoppingCartEntity.shoppingCartEntity;
+import static com.nikita.shop.database.entity.QShoppingCartProductEntity.shoppingCartProductEntity;
+import static com.nikita.shop.database.entity.QUserEntity.userEntity;
 
+@Repository
 public class ShoppingCartRepository extends RepositoryBase<Long, ShoppingCartEntity> {
+
     public ShoppingCartRepository(EntityManager entityManager) {
         super(entityManager, ShoppingCartEntity.class);
     }

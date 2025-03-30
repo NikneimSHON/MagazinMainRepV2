@@ -1,17 +1,20 @@
 package com.nikita.shop.database.repository.impl;
 
 import com.nikita.shop.dto.ProductReviewFilter;
-import com.nikita.shop.entity.ProductReviewEntity;
+import com.nikita.shop.database.entity.ProductReviewEntity;
 import com.nikita.shop.database.repository.QPredicate;
 import com.nikita.shop.database.repository.RepositoryBase;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Repository;
+
+import static com.nikita.shop.database.entity.QProductReviewEntity.productReviewEntity;
 
 import java.util.List;
 
-import static com.nikita.shop.entity.QProductReviewEntity.productReviewEntity;
-
+@Repository
 public class ProductReviewRepository extends RepositoryBase<Long, ProductReviewEntity> {
+
     public ProductReviewRepository(EntityManager entityManager) {
         super(entityManager, ProductReviewEntity.class);
     }
