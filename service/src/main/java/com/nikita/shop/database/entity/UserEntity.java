@@ -1,8 +1,8 @@
-package com.nikita.shop.entity;
+package com.nikita.shop.database.entity;
 
-import com.nikita.shop.entity.embeddable.UserActivity;
-import com.nikita.shop.entity.embeddable.UserCredentials;
-import com.nikita.shop.entity.embeddable.UserPersonalInfo;
+import com.nikita.shop.database.entity.embeddable.UserActivity;
+import com.nikita.shop.database.entity.embeddable.UserCredentials;
+import com.nikita.shop.database.entity.embeddable.UserPersonalInfo;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -13,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;

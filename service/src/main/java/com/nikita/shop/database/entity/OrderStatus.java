@@ -1,4 +1,4 @@
-package com.nikita.shop.entity;
+package com.nikita.shop.database.entity;
 
 public enum OrderStatus {
     BASKET, // корзина

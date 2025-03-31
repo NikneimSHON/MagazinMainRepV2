@@ -1,7 +1,8 @@
 package com.nikita.shop.database.repository;
 
-import com.nikita.shop.entity.BaseEntity;
+import com.nikita.shop.database.entity.BaseEntity;
 import jakarta.persistence.EntityManager;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Data
 public abstract class RepositoryBase<K extends Serializable, E extends BaseEntity<K>> implements Repository<K, E> {
     private final EntityManager entityManager;
     private final Class<E> entityClass;

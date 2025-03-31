@@ -1,10 +1,9 @@
-package com.nikita.shop.entity;
+package com.nikita.shop.database.entity;
 
-import com.nikita.shop.entity.embeddable.ProductInfo;
+import com.nikita.shop.database.entity.embeddable.ProductInfo;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;

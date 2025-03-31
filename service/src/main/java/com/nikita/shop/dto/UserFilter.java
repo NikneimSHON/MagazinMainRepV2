@@ -1,7 +1,7 @@
 package com.nikita.shop.dto;
 
-import com.nikita.shop.entity.Activity;
-import com.nikita.shop.entity.Role;
+import com.nikita.shop.database.entity.Activity;
+import com.nikita.shop.database.entity.Role;
 import lombok.Builder;
 import lombok.Value;
 

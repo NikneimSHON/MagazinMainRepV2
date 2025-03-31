@@ -1,6 +1,6 @@
-package com.nikita.shop.entity;
+package com.nikita.shop.database.entity;
 
-import com.nikita.shop.entity.embeddable.ShoppingCartDate;
+import com.nikita.shop.database.entity.embeddable.ShoppingCartDate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

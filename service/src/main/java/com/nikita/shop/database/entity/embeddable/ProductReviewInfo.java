@@ -1,4 +1,4 @@
-package com.nikita.shop.entity.embeddable;
+package com.nikita.shop.database.entity.embeddable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

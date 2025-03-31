@@ -1,4 +1,4 @@
-package com.nikita.shop.entity.embeddable;
+package com.nikita.shop.database.entity.embeddable;
 
 public enum ProductCategory {
     ELECTRONICS,          // Электроника (смартфоны, ноутбуки, планшеты)

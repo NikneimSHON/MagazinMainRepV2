@@ -1,7 +1,6 @@
-package com.nikita.shop.entity;
+package com.nikita.shop.database.entity;
 
-import com.nikita.shop.entity.embeddable.ProductReviewInfo;
-import jakarta.persistence.CascadeType;
+import com.nikita.shop.database.entity.embeddable.ProductReviewInfo;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

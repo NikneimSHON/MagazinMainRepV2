@@ -1,10 +1,7 @@
 package com.nikita.shop.dto;
 
-import com.nikita.shop.entity.embeddable.ProductCategory;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.nikita.shop.database.entity.embeddable.ProductCategory;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 @Value

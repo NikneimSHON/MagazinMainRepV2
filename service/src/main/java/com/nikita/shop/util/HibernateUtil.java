@@ -1,15 +1,15 @@
 package com.nikita.shop.util;
 
-import com.nikita.shop.entity.Activity;
-import com.nikita.shop.entity.AddressEntity;
-import com.nikita.shop.entity.ProductEntity;
-import com.nikita.shop.entity.ProductReviewEntity;
-import com.nikita.shop.entity.PromoCodeEntity;
-import com.nikita.shop.entity.Role;
-import com.nikita.shop.entity.ShoppingCartEntity;
-import com.nikita.shop.entity.ShoppingCartProductEntity;
-import com.nikita.shop.entity.UserEntity;
-import com.nikita.shop.entity.UserPromoCodeEntity;
+import com.nikita.shop.database.entity.Activity;
+import com.nikita.shop.database.entity.AddressEntity;
+import com.nikita.shop.database.entity.ProductEntity;
+import com.nikita.shop.database.entity.ProductReviewEntity;
+import com.nikita.shop.database.entity.PromoCodeEntity;
+import com.nikita.shop.database.entity.Role;
+import com.nikita.shop.database.entity.ShoppingCartEntity;
+import com.nikita.shop.database.entity.ShoppingCartProductEntity;
+import com.nikita.shop.database.entity.UserEntity;
+import com.nikita.shop.database.entity.UserPromoCodeEntity;
 import lombok.experimental.UtilityClass;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;

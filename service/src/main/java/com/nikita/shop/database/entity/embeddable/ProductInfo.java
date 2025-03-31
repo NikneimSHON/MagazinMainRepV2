@@ -1,6 +1,5 @@
-package com.nikita.shop.entity.embeddable;
+package com.nikita.shop.database.entity.embeddable;
 
-import com.nikita.shop.entity.Activity;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -9,16 +8,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Embeddable
-public class UserActivity {
-    private Instant lastLogin;
-    private Instant registrationDate;
+public class ProductInfo {
+    private String name;
+    private Integer price;
+    private String description;
     @Enumerated(EnumType.STRING)
-    private Activity activity;
+    private ProductCategory category;
+    private Integer count;
+    private String productImage;
 }
