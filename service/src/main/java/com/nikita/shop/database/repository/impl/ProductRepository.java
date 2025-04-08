@@ -20,7 +20,7 @@ public class ProductRepository extends RepositoryBase<Long, ProductEntity> {
         super(entityManager, ProductEntity.class);
     }
 
-    public List<ProductEntity> findProductWithFilter(EntityManager entityManager, ProductFilter filter, int offset, int limit) {
+    public List<ProductEntity> findProductWithFilter(ProductFilter filter, int offset, int limit) {
         var predicate = QPredicate.builder()
                 .add(filter.getMaxPrice(), productEntity.productInfo.price::loe)
                 .add(filter.getMinPrice(), productEntity.productInfo.price::goe)
@@ -31,13 +31,13 @@ public class ProductRepository extends RepositoryBase<Long, ProductEntity> {
                 .add(filter.getDescription().toLowerCase(), productEntity.productInfo.description.lower()::like)
                 .add(filter.getProductName(), productEntity.productInfo.name::like)
                 .buildAnd();
-        return new JPAQuery<ProductEntity>(entityManager)
+        return new JPAQuery<ProductEntity>(super.getEntityManager())
                 .select(productEntity)
                 .from(productEntity)
                 .where(predicate)
                 .offset(offset)
                 .limit(limit)
-                .setHint(GraphSemantic.FETCH.getJakartaHintName(), entityManager.getEntityGraph("WithPriceAndCategoryAndAvailable"))
+                .setHint(GraphSemantic.FETCH.getJakartaHintName(), super.getEntityManager().getEntityGraph("WithPriceAndCategoryAndAvailable"))
                 .fetch();
     }
 

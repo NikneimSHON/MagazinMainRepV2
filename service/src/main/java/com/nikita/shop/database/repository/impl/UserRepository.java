@@ -20,7 +20,7 @@ public class UserRepository extends RepositoryBase<Long, UserEntity> {
 
     }
 
-    public List<UserEntity> findUserWithFilter(EntityManager entityManager, UserFilter filter, int limit, int offset) {
+    public List<UserEntity> findUserWithFilter(UserFilter filter, int limit, int offset) {
         var predicate = QPredicate.builder()
                 .add(filter.getFirstName(), userEntity.personalInfo.firstname::eq)
                 .add(filter.getLastName(), userEntity.personalInfo.lastname::eq)
@@ -31,7 +31,7 @@ public class UserRepository extends RepositoryBase<Long, UserEntity> {
                 .add(filter.getRole(), userEntity.role::eq)
                 .buildAnd();
 
-        return new JPAQuery<UserEntity>(entityManager)
+        return new JPAQuery<UserEntity>(super.getEntityManager())
                 .select(userEntity)
                 .from(userEntity)
                 .where(predicate)

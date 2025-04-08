@@ -26,14 +26,14 @@ public class ShoppingCartRepository extends RepositoryBase<Long, ShoppingCartEnt
         super(entityManager, ShoppingCartEntity.class);
     }
 
-    public List<ShoppingCartEntity> findShoppingCartWithFilter(EntityManager entityManager, ShoppingCartFilter filter, int offset, int limit) {
+    public List<ShoppingCartEntity> findShoppingCartWithFilter(ShoppingCartFilter filter, int offset, int limit) {
         var predicate = QPredicate.builder()
                 .add(filter.getStatus(), shoppingCartEntity.orderStatus::eq)
                 .add(filter.getBeforeCreateTime(), shoppingCartEntity.shoppingCartDate.creatTime::loe)
                 .add(filter.getAfterCreateTime(), shoppingCartEntity.shoppingCartDate.creatTime::goe)
                 .add(filter.getUserId(), shoppingCartEntity.user.id::eq)
                 .buildAnd();
-        return new JPAQuery<ShoppingCartEntity>(entityManager)
+        return new JPAQuery<ShoppingCartEntity>(super.getEntityManager())
                 .select(shoppingCartEntity)
                 .from(shoppingCartEntity)
                 .where(predicate)
@@ -43,16 +43,16 @@ public class ShoppingCartRepository extends RepositoryBase<Long, ShoppingCartEnt
     }
 
 
-    public List<ProductEntity> findProductWithShoppingCart(EntityManager entityManager, ShoppingCartEntity shoppingCartEntity) {
-        return new JPAQuery<ProductEntity>(entityManager)
+    public List<ProductEntity> findProductWithShoppingCart(ShoppingCartEntity shoppingCartEntity) {
+        return new JPAQuery<ProductEntity>(super.getEntityManager())
                 .select(productEntity)
                 .from(shoppingCartProductEntity)
                 .where(shoppingCartProductEntity.cart.id.eq(shoppingCartEntity.getId()))
                 .fetch();
     }
 
-    public Map<Long, Long> findUserAndShoppingCartByProductID(EntityManager entityManager, ProductEntity productEntity) {
-        List<Tuple> results = new JPAQuery<Tuple>(entityManager)
+    public Map<Long, Long> findUserAndShoppingCartByProductID(ProductEntity productEntity) {
+        List<Tuple> results = new JPAQuery<Tuple>(super.getEntityManager())
                 .select(userEntity.id, shoppingCartEntity.id)
                 .from(shoppingCartProductEntity)
                 .join(shoppingCartProductEntity.cart, shoppingCartEntity)

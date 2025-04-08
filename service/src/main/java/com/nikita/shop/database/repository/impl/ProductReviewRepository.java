@@ -19,7 +19,7 @@ public class ProductReviewRepository extends RepositoryBase<Long, ProductReviewE
         super(entityManager, ProductReviewEntity.class);
     }
 
-    public List<ProductReviewEntity> findProductReviewWithFilter(EntityManager entityManager, ProductReviewFilter filter, int offset, int limit) {
+    public List<ProductReviewEntity> findProductReviewWithFilter(ProductReviewFilter filter, int offset, int limit) {
         var predicate = QPredicate.builder()
                 .add(filter.getRating(), productReviewEntity.productReviewInfo.rating::eq)
                 .add(filter.getDescription().toLowerCase(), productReviewEntity.productReviewInfo.description.lower()::like)
@@ -27,7 +27,7 @@ public class ProductReviewRepository extends RepositoryBase<Long, ProductReviewE
                 .add(filter.getAfterCreateTime(), productReviewEntity.productReviewInfo.createTime::goe)
                 .add(filter.getUserId(), productReviewEntity.user.id::eq)
                 .buildAnd();
-        return new JPAQuery<ProductReviewEntity>(entityManager)
+        return new JPAQuery<ProductReviewEntity>(super.getEntityManager())
                 .select(productReviewEntity)
                 .from(productReviewEntity)
                 .where(predicate)

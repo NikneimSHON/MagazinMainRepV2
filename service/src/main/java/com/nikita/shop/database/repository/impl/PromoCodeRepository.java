@@ -20,7 +20,7 @@ public class PromoCodeRepository extends RepositoryBase<Long, PromoCodeEntity> {
         super(entityManager, PromoCodeEntity.class);
     }
 
-    public List<PromoCodeEntity> findPromoCodeWithFilter(EntityManager entityManager, PromoCodeFilter filter, int limit, int offset) {
+    public List<PromoCodeEntity> findPromoCodeWithFilter(PromoCodeFilter filter, int limit, int offset) {
         var predicate = QPredicate.builder()
                 .add(filter.isActivityPromo(), promoCodeEntity.activityPromo::eq)
                 .add(filter.getMinOrderAmount(), promoCodeEntity.minOrderAmount::goe)
@@ -30,7 +30,7 @@ public class PromoCodeRepository extends RepositoryBase<Long, PromoCodeEntity> {
                 .add(filter.getMaxDiscountSum(), promoCodeEntity.discountSum::loe)
                 .buildAnd();
 
-        return new JPAQuery<PromoCodeEntity>(entityManager)
+        return new JPAQuery<PromoCodeEntity>(super.getEntityManager())
                 .select(promoCodeEntity)
                 .from(promoCodeEntity)
                 .where(predicate)
