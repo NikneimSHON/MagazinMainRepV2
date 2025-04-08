@@ -1,5 +1,6 @@
 package Integration;
 
+import Integration.annotation.IT;
 import com.nikita.shop.database.repository.impl.AddressRepository;
 import com.nikita.shop.database.entity.Activity;
 import com.nikita.shop.database.entity.AddressEntity;
@@ -9,19 +10,21 @@ import com.nikita.shop.database.entity.embeddable.AddressInfo;
 import com.nikita.shop.database.entity.embeddable.UserActivity;
 import com.nikita.shop.database.entity.embeddable.UserCredentials;
 import com.nikita.shop.database.entity.embeddable.UserPersonalInfo;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import util.TransactionManager;
+import org.springframework.test.context.TestConstructor;
+import Integration.util.ContainerStarter;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public class RepositoryBaseIT extends TransactionManager {
+@IT
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+public class RepositoryBaseIT extends ContainerStarter {
 
-    private final AddressRepository repository = context.getBean(AddressRepository.class);
+    private final AddressRepository repository;
 
     @Test
     void save() {
