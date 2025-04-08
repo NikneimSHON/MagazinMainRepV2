@@ -11,10 +11,12 @@ import com.nikita.shop.database.entity.embeddable.UserActivity;
 import com.nikita.shop.database.entity.embeddable.UserCredentials;
 import com.nikita.shop.database.entity.embeddable.UserPersonalInfo;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import Integration.util.ContainerStarter;
+import org.springframework.test.context.TestConstructor;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -24,12 +26,14 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 @IT
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+@RequiredArgsConstructor
 public class RepositoryBaseIT extends ContainerStarter {
 
-    @Autowired
-    private AddressRepository repository;
-    @Autowired
-    private EntityManager entityManager;
+
+    private final AddressRepository repository;
+
+    private final EntityManager entityManager;
 
     @Test
     void update() {
