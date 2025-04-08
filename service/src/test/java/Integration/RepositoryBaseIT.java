@@ -10,9 +10,10 @@ import com.nikita.shop.database.entity.embeddable.AddressInfo;
 import com.nikita.shop.database.entity.embeddable.UserActivity;
 import com.nikita.shop.database.entity.embeddable.UserCredentials;
 import com.nikita.shop.database.entity.embeddable.UserPersonalInfo;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.TestConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import Integration.util.ContainerStarter;
 
 import java.time.Instant;
@@ -20,62 +21,77 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.*;
+
 @IT
-@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class RepositoryBaseIT extends ContainerStarter {
 
-    private final AddressRepository repository;
-
-    @Test
-    void save() {
-        var addressResult = repository.save(getAddressEntity());
-        Assertions.assertNotNull(addressResult);
-    }
+    @Autowired
+    private AddressRepository repository;
+    @Autowired
+    private EntityManager entityManager;
 
     @Test
     void update() {
+        // Given
         AddressEntity address = getAddressEntity();
         repository.save(address);
-        address.getAddressInfo().setCity("Fake");
+        String updatedCity = "Fake";
+
+        // When
+        address.getAddressInfo().setCity(updatedCity);
         repository.update(address);
 
-        var addressResult = repository.findById(address.getId());
-
-        Assertions.assertNotNull(addressResult);
-        Assertions.assertEquals("Fake", address.getAddressInfo().getCity());
-
+        // Then
+        AddressEntity addressResult = repository.findById(address.getId()).orElseThrow();
+        assertNotNull(addressResult);
+        assertEquals(updatedCity, addressResult.getAddressInfo().getCity());
     }
 
     @Test
     void delete() {
+        // Given
         AddressEntity address = getAddressEntity();
         repository.save(address);
 
+        // When
         repository.delete(address);
 
+        // Then
         Optional<AddressEntity> resultEntity = repository.findById(address.getId());
-        Assertions.assertFalse(resultEntity.isPresent());
-
+        assertFalse(resultEntity.isPresent());
     }
 
     @Test
     void findById() {
+        // Given
         AddressEntity address = getAddressEntity();
         repository.save(address);
-        session.clear();
+        entityManager.clear();
+        Long addressId = address.getId();
 
-        Optional<AddressEntity> resultEntity = repository.findById(address.getId());
-        Assertions.assertTrue(resultEntity.isPresent());
+        // When
+        Optional<AddressEntity> resultEntity = repository.findById(addressId);
+
+        // Then
+        assertTrue(resultEntity.isPresent());
+        assertEquals(addressId, resultEntity.get().getId());
     }
 
     @Test
     void findAll() {
+        // Given
         AddressEntity address = getAddressEntity();
         repository.save(address);
-        session.clear();
+        entityManager.clear();
 
-        List<AddressEntity> resultEntity = repository.findAll();
-        Assertions.assertFalse(resultEntity.isEmpty());
+        // When
+        List<AddressEntity> resultEntities = repository.findAll();
+
+        // Then
+        assertFalse(resultEntities.isEmpty());
+        assertTrue(resultEntities.stream()
+                .anyMatch(a -> a.getId().equals(address.getId())));
     }
 
 
