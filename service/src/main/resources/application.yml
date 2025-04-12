@@ -9,11 +9,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        current_session_context_class: thread
         hbm2ddl:
           auto: update
           naming:
-            physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
 
 logging:
   level:

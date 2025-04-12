@@ -30,9 +30,7 @@ import static org.junit.Assert.*;
 @RequiredArgsConstructor
 public class RepositoryBaseIT extends ContainerStarter {
 
-
     private final AddressRepository repository;
-
     private final EntityManager entityManager;
 
     @Test
