@@ -1,45 +1,27 @@
 package com.nikita.shop.database.repository.impl;
 
-import com.nikita.shop.dto.UserFilter;
-import com.nikita.shop.database.entity.UserEntity;
-import com.nikita.shop.database.repository.QPredicate;
-import com.nikita.shop.database.repository.RepositoryBase;
-import com.querydsl.jpa.impl.JPAQuery;
-import jakarta.persistence.EntityManager;
+import com.nikita.shop.entity.Activity;
+import com.nikita.shop.entity.UserEntity;
+import com.nikita.shop.database.repository.filter.FilterUserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import static com.nikita.shop.database.entity.QUserEntity.userEntity;
-
-import java.util.List;
-
 @Repository
-public class UserRepository extends RepositoryBase<Long, UserEntity> {
+public interface UserRepository extends JpaRepository<UserEntity, Long>, FilterUserRepository {
 
-    public UserRepository(EntityManager entityManager) {
-        super(entityManager, UserEntity.class);
+    @Query("SELECT u FROM UserEntity u WHERE u.credentials.email = :email AND u.phoneNumber = :phoneNumber")
+    Page<UserEntity> findAllByEmailAndPhoneNumber(
+            @Param("email") String email,
+            @Param("phoneNumber") String phoneNumber,
+            Pageable pageable
+    );
 
-    }
-
-    public List<UserEntity> findUserWithFilter(UserFilter filter, int limit, int offset) {
-        var predicate = QPredicate.builder()
-                .add(filter.getFirstName(), userEntity.personalInfo.firstname::eq)
-                .add(filter.getLastName(), userEntity.personalInfo.lastname::eq)
-                .add(filter.getPhoneNumber(), userEntity.phoneNumber::eq)
-                .add(filter.getBeforeBirthday(), userEntity.personalInfo.birthDate::loe)
-                .add(filter.getAfterBirthday(), userEntity.personalInfo.birthDate::goe)
-                .add(filter.getActivity(), userEntity.activity.activity::eq)
-                .add(filter.getRole(), userEntity.role::eq)
-                .buildAnd();
-
-        return new JPAQuery<UserEntity>(super.getEntityManager())
-                .select(userEntity)
-                .from(userEntity)
-                .where(predicate)
-                .limit(limit)
-                .offset(offset)
-                .fetch();
-
-    }
+    @Query("select u from UserEntity u where u.userActivity.activity = :activity")
+    Page<UserEntity> findAllByActivity(@Param("activity") Activity activity, Pageable pageable);
 
 
 }

@@ -1,44 +1,23 @@
 package com.nikita.shop.database.repository.impl;
 
-import com.nikita.shop.dto.ProductFilter;
-import com.nikita.shop.database.entity.ProductEntity;
-import com.nikita.shop.database.repository.QPredicate;
-import com.nikita.shop.database.repository.RepositoryBase;
-import com.querydsl.jpa.impl.JPAQuery;
-import jakarta.persistence.EntityManager;
-import org.hibernate.graph.GraphSemantic;
+import com.nikita.shop.entity.embeddable.ProductCategory;
+import com.nikita.shop.database.repository.filter.FilterProductRepository;
+import com.nikita.shop.entity.ProductEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import static com.nikita.shop.database.entity.QProductEntity.productEntity;
-
-import java.util.List;
-
 @Repository
-public class ProductRepository extends RepositoryBase<Long, ProductEntity> {
+public interface ProductRepository extends JpaRepository<ProductEntity, Long>, FilterProductRepository {
 
-    public ProductRepository(EntityManager entityManager) {
-        super(entityManager, ProductEntity.class);
-    }
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("delete from ProductEntity a where a.productInfo.category = :category")
+    int deleteByCategory(@Param("category") ProductCategory category);
 
-    public List<ProductEntity> findProductWithFilter(ProductFilter filter, int offset, int limit) {
-        var predicate = QPredicate.builder()
-                .add(filter.getMaxPrice(), productEntity.productInfo.price::loe)
-                .add(filter.getMinPrice(), productEntity.productInfo.price::goe)
-                .add(filter.getMaxCount(), productEntity.productInfo.count::loe)
-                .add(filter.getMinCount(), productEntity.productInfo.count::goe)
-                .add(filter.getCategory(), productEntity.productInfo.category::eq)
-                .add(filter.isAvailable(), productEntity.available::eq)
-                .add(filter.getDescription().toLowerCase(), productEntity.productInfo.description.lower()::like)
-                .add(filter.getProductName(), productEntity.productInfo.name::like)
-                .buildAnd();
-        return new JPAQuery<ProductEntity>(super.getEntityManager())
-                .select(productEntity)
-                .from(productEntity)
-                .where(predicate)
-                .offset(offset)
-                .limit(limit)
-                .setHint(GraphSemantic.FETCH.getJakartaHintName(), super.getEntityManager().getEntityGraph("WithPriceAndCategoryAndAvailable"))
-                .fetch();
-    }
-
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("UPDATE ProductEntity a SET a.productInfo.category = :newValue WHERE a.productInfo.category = :category")
+    int updateAllByCategory(@Param("category") ProductCategory category,
+                            @Param("newValue") ProductCategory newValue);
 }

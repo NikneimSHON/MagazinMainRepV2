@@ -1,0 +1,136 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/v1/users": {
+      "get": {
+        "tags": [
+          "user-rest-controller"
+        ],
+        "operationId": "findAll",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseUserReadDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Metadata": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PageResponseUserReadDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserReadDto"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        }
+      },
+      "UserReadDto": {
+        "type": "object",
+        "properties": {
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "Role.ADMIN",
+              "Role.USER"
+            ]
+          },
+          "activity": {
+            "type": "string",
+            "enum": [
+              "Activity.ALLOWED",
+              "Activity.BLOCKED"
+            ]
+          },
+          "email": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    }
+  }
+}

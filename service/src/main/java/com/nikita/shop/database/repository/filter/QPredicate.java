@@ -1,4 +1,4 @@
-package com.nikita.shop.database.repository;
+package com.nikita.shop.database.repository.filter;
 
 import java.util.ArrayList;
 import java.util.List;
