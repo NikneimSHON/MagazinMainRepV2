@@ -1,20 +1,18 @@
-package Integration;
+package Integration.repository;
 
 import Integration.annotation.IT;
 import com.nikita.shop.database.repository.impl.AddressRepository;
-import com.nikita.shop.database.entity.Activity;
-import com.nikita.shop.database.entity.AddressEntity;
-import com.nikita.shop.database.entity.Role;
-import com.nikita.shop.database.entity.UserEntity;
-import com.nikita.shop.database.entity.embeddable.AddressInfo;
-import com.nikita.shop.database.entity.embeddable.UserActivity;
-import com.nikita.shop.database.entity.embeddable.UserCredentials;
-import com.nikita.shop.database.entity.embeddable.UserPersonalInfo;
+import com.nikita.shop.entity.Activity;
+import com.nikita.shop.entity.AddressEntity;
+import com.nikita.shop.entity.Role;
+import com.nikita.shop.entity.UserEntity;
+import com.nikita.shop.entity.embeddable.AddressInfo;
+import com.nikita.shop.entity.embeddable.UserActivity;
+import com.nikita.shop.entity.embeddable.UserCredentials;
+import com.nikita.shop.entity.embeddable.UserPersonalInfo;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import Integration.util.ContainerStarter;
 import org.springframework.test.context.TestConstructor;
 
@@ -42,7 +40,7 @@ public class RepositoryBaseIT extends ContainerStarter {
 
         // When
         address.getAddressInfo().setCity(updatedCity);
-        repository.update(address);
+        repository.save(address);
 
         // Then
         AddressEntity addressResult = repository.findById(address.getId()).orElseThrow();
@@ -125,7 +123,7 @@ public class RepositoryBaseIT extends ContainerStarter {
                         .emailVerified(true)
                         .email("fafsa@mail.ru")
                         .build())
-                .activity(UserActivity.builder()
+                .userActivity(UserActivity.builder()
                         .registrationDate(Instant.now())
                         .activity(Activity.ALLOWED)
                         .lastLogin(Instant.now())

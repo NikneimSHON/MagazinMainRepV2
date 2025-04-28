@@ -1,9 +1,9 @@
-package com.nikita.shop.dto;
+package com.nikita.shop.database.filter;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 @Builder
 public class AddressFilter {
     String country;

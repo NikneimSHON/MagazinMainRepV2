@@ -1,11 +1,11 @@
-package com.nikita.shop.dto;
+package com.nikita.shop.database.filter;
 
-import com.nikita.shop.database.entity.OrderStatus;
+import com.nikita.shop.entity.OrderStatus;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 import java.time.Instant;
-@Value
+@Data
 @Builder
 public class ShoppingCartFilter {
     OrderStatus status;

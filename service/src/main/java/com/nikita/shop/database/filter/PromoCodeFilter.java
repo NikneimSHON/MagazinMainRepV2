@@ -1,13 +1,13 @@
-package com.nikita.shop.dto;
+package com.nikita.shop.database.filter;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 import java.time.Instant;
-@Value
+@Data
 @Builder
 public class PromoCodeFilter {
-    boolean activityPromo;
+    Boolean activityPromo;
     Integer minDiscountSum;
     Integer maxDiscountSum;
     Integer minOrderAmount;

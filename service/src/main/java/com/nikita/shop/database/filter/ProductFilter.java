@@ -1,18 +1,17 @@
-package com.nikita.shop.dto;
+package com.nikita.shop.database.filter;
 
-import com.nikita.shop.database.entity.embeddable.ProductCategory;
+import com.nikita.shop.entity.embeddable.ProductCategory;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 @Builder
 public class ProductFilter {
     String productName;
-    String description;
     ProductCategory category;
     Integer maxCount;
     Integer minCount;
     Integer minPrice;
     Integer maxPrice;
-    boolean available;
+    Boolean available;
 }
